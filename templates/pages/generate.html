@@ -1,0 +1,86 @@
+
+{% extends "base.html" %}
+
+{% block title %}Generate New Template{% endblock %}
+
+{% block content %}
+<h2 class="text-2xl font-semibold text-gray-800 mb-4">Generate New Template</h2>
+
+<div 
+    class="bg-white shadow-md rounded-lg p-6"
+    x-data="{
+        cvFile: null,
+        lmFile: null,
+        cvFileName: 'No file chosen',
+        lmFileName: 'No file chosen',
+        isLoading: false,
+        updateFileName(event, type) {
+            const file = event.target.files[0];
+            if (file) {
+                if (type === 'cv') {
+                    this.cvFile = file;
+                    this.cvFileName = file.name;
+                } else {
+                    this.lmFile = file;
+                    this.lmFileName = file.name;
+                }
+            }
+        }
+    }"
+    hx-ext="morph,loading-states"
+    >
+    <form 
+        action="{{ url_for('handle_generate_form') }}"
+        method="post"
+        enctype="multipart/form-data"
+        hx-post="{{ url_for('handle_generate_form') }}"
+        hx-encoding="multipart/form-data"
+        hx-target="body"
+        hx-swap="outerHTML"
+        hx-push-url="true"
+        @submit="isLoading = true"
+        >
+        <div class="space-y-6">
+            <!-- CV Upload -->
+            <div>
+                <label for="cv_pdf" class="block text-sm font-medium text-gray-700">CV (PDF)</label>
+                <div class="mt-1 flex items-center">
+                    <label class="px-4 py-2 bg-white text-blue-500 rounded-md border border-blue-500 cursor-pointer hover:bg-blue-50">
+                        <span>Choose File</span>
+                        <input id="cv_pdf" name="cv_pdf" type="file" class="sr-only" @change="updateFileName($event, 'cv')" required>
+                    </label>
+                    <span class="ml-3 text-gray-600" x-text="cvFileName"></span>
+                </div>
+            </div>
+
+            <!-- LM Upload -->
+            <div>
+                <label for="lm_pdf" class="block text-sm font-medium text-gray-700">Letter of Motivation (PDF)</label>
+                <div class="mt-1 flex items-center">
+                     <label class="px-4 py-2 bg-white text-blue-500 rounded-md border border-blue-500 cursor-pointer hover:bg-blue-50">
+                        <span>Choose File</span>
+                        <input id="lm_pdf" name="lm_pdf" type="file" class="sr-only" @change="updateFileName($event, 'lm')" required>
+                    </label>
+                    <span class="ml-3 text-gray-600" x-text="lmFileName"></span>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="pt-4 flex justify-end">
+                <button 
+                    type="submit"
+                    class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+                    :disabled="!cvFile || !lmFile || isLoading"
+                    ld-class="opacity-50"
+                    >
+                    <svg x-show="isLoading" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span x-text="isLoading ? 'Generating...' : 'Start Generation'"></span>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

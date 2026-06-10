@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Karria Templates{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        /* Simple style for sidebar staying fixed */
+        body { display: flex; }
+        main { flex-grow: 1; }
+        /* HTMX indicator */
+        .htmx-indicator{
+            display: none;
+        }
+        .htmx-request .htmx-indicator{
+            display: inline;
+        }
+        .htmx-request.htmx-indicator{
+            display: inline;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Sidebar -->
+    <aside class="bg-gray-800 text-white w-64 min-h-screen p-4">
+        <div class="text-2xl font-bold mb-10">Karria</div>
+        <nav>
+            <a href="{{ url_for('list_templates') }}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">
+                Templates
+            </a>
+            <a href="{{ url_for('generate_new_template_form') }}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">
+                Generate New
+            </a>
+            <a href="#" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">
+                Batch Processing
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="w-full p-8">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Toast Notifications -->
+    <div x-data="{ toasts: [], addToast(toast) { this.toasts.push(toast); setTimeout(() => this.removeToast(toast.id), 3000); }, removeToast(id) { this.toasts = this.toasts.filter(t => t.id !== id); } }"
+         @htmx:after-swap="
+            const message = event.detail.xhr.getResponseHeader('X-Message');
+            if (message) {
+                addToast({ id: Date.now(), text: message, type: 'success' });
+            }
+         "
+         class="fixed bottom-0 right-0 p-8 space-y-2">
+        <template x-for="toast in toasts" :key="toast.id">
+            <div
+                x-show="true"
+                x-transition:enter="transition ease-out duration-300"
+                x-transition:enter-start="opacity-0 transform translate-y-2"
+                x-transition:enter-end="opacity-100 transform translate-y-0"
+                x-transition:leave="transition ease-in duration-200"
+                x-transition:leave-start="opacity-100 transform translate-y-0"
+                x-transition:leave-end="opacity-0 transform translate-y-2"
+                class="bg-green-500 text-white px-4 py-2 rounded-lg shadow-md"
+                x-text="toast.text">
+            </div>
+        </template>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,89 @@
+{
+  "fullName": "BENJAMIN LEROY",
+  "photo": "https://i.imgur.com/3fQY4n3.png",
+  "contact": {
+    "phone": "+123-456-7890",
+    "email": "hello@reallygreatsite.com",
+    "address": "123 Anywhere St., Any City"
+  },
+  "summary": "En tant qu'ingénieur aérospatial polyvalent, je dispose d'une expérience significative dans la modélisation numérique, l'analyse de performances aérodynamiques et la gestion de projets spatiaux.",
+  "labels": {
+    "contact": "CONTACT",
+    "profile": "PROFIL",
+    "education": "FORMATION",
+    "experiences": "EXPÉRIENCES PROFESSIONNELLES",
+    "skills": "COMPÉTENCES",
+    "languages": "LANGUES"
+  },
+  "education": [
+    {
+      "degree": "MASTER EN INGÉNIERIE AÉROSPATIALE",
+      "start": "2018",
+      "end": "2020",
+      "school": "École Amédé Autran"
+    },
+    {
+      "degree": "BACHELOR EN INGÉNIERIE MÉCANIQUE",
+      "start": "2015",
+      "end": "2018",
+      "school": "École Amédé Autran"
+    },
+    {
+      "degree": "BACCALAURÉAT",
+      "start": "2015",
+      "end": "2015",
+      "school": "École Amédé Autran"
+    }
+  ],
+  "experiences": [
+    {
+      "position": "INGÉNIEUR AÉROSPATIAL",
+      "company": "CONCORDIA",
+      "start": "2023",
+      "end": "Aujourd'hui",
+      "description": "Conception et développement de sous-systèmes pour les satellites de télécommunication.\nGestion de projets de recherche et développement, de la phase de conception à la phase de réalisation, en collaboration avec des partenaires internationaux.\nAnalyse des performances de vol et optimisation des systèmes pour améliorer l'efficacité opérationnelle des satellites."
+    },
+    {
+      "position": "INGÉNIEUR DE RECHERCHE EN AÉROSPATIAL",
+      "company": "MESSAGEM",
+      "start": "2021",
+      "end": "2023",
+      "description": "Participation à des projets de recherche sur les véhicules hypersoniques et les technologies de propulsion avancées.\nDéveloppement de modèles numériques pour simuler les écoulements supersoniques et hypersoniques et évaluer les performances des véhicules.\nPublication d'articles dans des revues spécialisées et présentation des résultats lors de conférences internationales."
+    },
+    {
+      "position": "STAGIAIRE EN INGÉNIERIE AÉROSPATIALE",
+      "company": "NOMADE",
+      "start": "Juillet",
+      "end": "décembre 2020",
+      "description": "Assister les ingénieurs dans l'analyse de données des missions spatiales, y compris les orbites, les trajectoires et les performances des lanceurs.\nContribuer à la préparation des rapports de mission et à l'évaluation des performances des systèmes de propulsion.\nAcquérir une compréhension pratique des opérations spatiales au sein d'une organisation internationale."
+    }
+  ],
+  "skills": [
+    {
+      "name": "Conception et modélisation de véhicules spatiaux",
+      "level": 5
+    },
+    {
+      "name": "Analyse des performances aérodynamiques",
+      "level": 5
+    },
+    {
+      "name": "Simulation numérique et calcul haute performance",
+      "level": 5
+    },
+    {
+      "name": "Gestion de projet et management d'équipe",
+      "level": 5
+    }
+  ],
+  "languages": [
+    {
+      "name": "Français",
+      "level": 5
+    },
+    {
+      "name": "Anglais",
+      "level": 5
+    }
+  ]
+}

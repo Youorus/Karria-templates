@@ -1,0 +1,240 @@
+{
+  "version": "1.0",
+  "meta": {
+    "layout": "single-column",
+    "primary_color": "#323232",
+    "fonts": [
+      "Raleway"
+    ],
+    "fonts_substitutions": {},
+    "has_photo": true
+  },
+  "fields": {
+    "fullName": {
+      "type": "string",
+      "required": true
+    },
+    "jobTitle": {
+      "type": "string",
+      "required": false
+    },
+    "photo": {
+      "type": "string",
+      "required": false
+    },
+    "summary": {
+      "type": "string",
+      "required": true,
+      "maxLength": 380
+    },
+    "availability": {
+      "type": "string",
+      "required": false
+    },
+    "preferred_language": {
+      "type": "string",
+      "required": false
+    },
+    "contact": {
+      "type": "object",
+      "required": true,
+      "fields": {
+        "phone": {
+          "type": "string",
+          "required": false
+        },
+        "email": {
+          "type": "string",
+          "required": false
+        },
+        "address": {
+          "type": "string",
+          "required": false
+        }
+      }
+    },
+    "labels": {
+      "type": "object",
+      "required": true,
+      "fields": {
+        "contact": {
+          "type": "string",
+          "required": true
+        },
+        "experiences": {
+          "type": "string",
+          "required": true
+        },
+        "education": {
+          "type": "string",
+          "required": true
+        },
+        "skills": {
+          "type": "string",
+          "required": true
+        },
+        "languages": {
+          "type": "string",
+          "required": true
+        },
+        "interests": {
+          "type": "string",
+          "required": true
+        },
+        "profile": {
+          "type": "string",
+          "required": false
+        }
+      }
+    },
+    "experiences": {
+      "type": "array",
+      "required": false,
+      "maxItems": 4,
+      "item": {
+        "type": "object",
+        "fields": {
+          "position": {
+            "type": "string",
+            "required": true
+          },
+          "company": {
+            "type": "string",
+            "required": true
+          },
+          "location": {
+            "type": "string",
+            "required": false
+          },
+          "start": {
+            "type": "string",
+            "required": true
+          },
+          "end": {
+            "type": "string",
+            "required": false
+          },
+          "description": {
+            "type": "string",
+            "required": false,
+            "maxLength": 185
+          }
+        }
+      }
+    },
+    "education": {
+      "type": "array",
+      "required": false,
+      "maxItems": 2,
+      "item": {
+        "type": "object",
+        "fields": {
+          "degree": {
+            "type": "string",
+            "required": true
+          },
+          "school": {
+            "type": "string",
+            "required": true
+          },
+          "location": {
+            "type": "string",
+            "required": false
+          },
+          "start": {
+            "type": "string",
+            "required": false
+          },
+          "end": {
+            "type": "string",
+            "required": false
+          }
+        }
+      }
+    },
+    "skills": {
+      "type": "array",
+      "required": false,
+      "maxItems": 9,
+      "item": {
+        "type": "object",
+        "fields": {
+          "name": {
+            "type": "string",
+            "required": true
+          },
+          "level": {
+            "type": "integer",
+            "required": false,
+            "min": 1,
+            "max": 5
+          }
+        }
+      }
+    },
+    "languages": {
+      "type": "array",
+      "required": false,
+      "maxItems": 4,
+      "item": {
+        "type": "object",
+        "fields": {
+          "name": {
+            "type": "string",
+            "required": true
+          },
+          "level": {
+            "type": "integer",
+            "required": false,
+            "min": 1,
+            "max": 5
+          }
+        }
+      }
+    },
+    "interests": {
+      "type": "array",
+      "required": false,
+      "maxItems": 4,
+      "item": {
+        "type": "object",
+        "fields": {
+          "icon": {
+            "type": "string",
+            "required": false
+          },
+          "label": {
+            "type": "string",
+            "required": true
+          }
+        }
+      }
+    },
+    "references": {
+      "type": "array",
+      "required": false,
+      "maxItems": 0,
+      "item": {
+        "type": "object",
+        "fields": {
+          "name": {
+            "type": "string",
+            "required": true
+          },
+          "title": {
+            "type": "string",
+            "required": false
+          },
+          "phone": {
+            "type": "string",
+            "required": false
+          },
+          "email": {
+            "type": "string",
+            "required": false
+          }
+        }
+      }
+    }
+  }
+}

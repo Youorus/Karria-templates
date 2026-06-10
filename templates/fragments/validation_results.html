@@ -1,0 +1,41 @@
+
+<div class="space-y-4">
+    <div class="flex items-center justify-between">
+        <h4 class="font-semibold">Quality Score:</h4>
+        <span class="px-3 py-1 text-sm font-bold rounded-full"
+            :class="{
+                'bg-green-100 text-green-800': {{ results.score }} >= 80,
+                'bg-yellow-100 text-yellow-800': {{ results.score }} >= 50 && {{ results.score }} < 80,
+                'bg-red-100 text-red-800': {{ results.score }} < 50,
+            }"
+        >
+            {{ "%.1f"|format(results.score) }}%
+        </span>
+    </div>
+
+    {% if results.errors %}
+    <div>
+        <h5 class="font-semibold text-red-600">Errors:</h5>
+        <ul class="list-disc list-inside mt-1 space-y-1 text-sm text-red-700">
+            {% for error in results.errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    {% if results.warnings %}
+    <div>
+        <h5 class="font-semibold text-yellow-600">Warnings:</h5>
+        <ul class="list-disc list-inside mt-1 space-y-1 text-sm text-yellow-700">
+            {% for warning in results.warnings %}
+                <li>{{ warning }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    {% if not results.errors and not results.warnings %}
+    <p class="text-sm text-green-700">No issues found. Looks great!</p>
+    {% endif %}
+</div>

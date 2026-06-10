@@ -1,0 +1,76 @@
+
+{% extends "web/base.html" %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<div class="flex h-full flex-col">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-4">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-800">Preview & Validate</h1>
+            <p class="text-gray-500">Template ID: <span class="font-mono">{{ template.id }}</span></p>
+        </div>
+        <div>
+            <button class=\"bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mr-2\">
+                Edit
+            </button>
+            <button id=\"submit-btn\" disabled
+                    hx-post=\"{{ url_for('submit_template', template_id=template.id) }}\"
+                    hx-target=\"#validation-container\"
+                    hx-swap=\"beforeend\"
+                    class=\"bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded disabled:bg-gray-300 disabled:cursor-not-allowed\">
+                <span class=\"htmx-indicator\">
+                    <svg class=\"animate-spin h-5 w-5 text-white inline-block\" xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" viewBox=\"0 0 24 24\"><circle class=\"opacity-25\" cx=\"12\" cy=\"12\" r=\"10\" stroke=\"currentColor\" stroke-width=\"4\"></circle><path class=\"opacity-75\" fill=\"currentColor\" d=\"M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z\"></path></svg>
+                </span>
+                <span>Submit</span>
+            </button>
+        </div>
+        </div>
+
+    <!-- Main Content Grid -->
+    <div class="grid grid-cols-12 gap-6 h-full flex-grow">
+        <!-- Left Panel: Files and Validation -->
+        <div class="col-span-4 bg-white p-6 rounded-lg shadow-md flex flex-col">
+            <h2 class="text-xl font-bold mb-4">Template Files</h2>
+            <ul class="mb-6 space-y-2">
+                {% for filename, details in template.files.items() %}
+                <li class="flex items-center text-sm p-2 rounded hover:bg-gray-100">
+                    <span class="font-mono text-gray-700">{{ filename }}</span>
+                    <span class="ml-auto text-gray-500">{{ "%.2f" | format(details.size / 1024) }} KB</span>
+                </li>
+                {% endfor %}
+            </ul>
+
+            <hr class="my-4">
+
+            <h2 class="text-xl font-bold mb-4">Technical Validation</h2>
+            <div id="validation-container">
+                <button hx-post="{{ url_for('validate_render', template_id=template.id) }}"
+                        hx-target="#validation-container"
+                        hx-swap="innerHTML"
+                        class="w-full bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">
+                    <span class="htmx-indicator">
+                        <svg class="animate-spin h-5 w-5 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+                    </span>
+                    <span>Run Validation</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Right Panel: Previews -->
+        <div class="col-span-8 grid grid-cols-2 gap-4">
+            <!-- Original PDF -->
+            <div class="bg-white rounded-lg shadow-md p-4">
+                <h3 class="font-bold text-center mb-2">Original PDF</h3>
+                <iframe src="/outputs/{{ template.id }}/preview.pdf" class="w-full h-full border"></iframe>
+            </div>
+            <!-- Rendered HTML -->
+            <div class="bg-white rounded-lg shadow-md p-4">
+                <h3 class="font-bold text-center mb-2">HTML Preview</h3>
+                <iframe src="{{ url_for('render_template_for_preview', template_id=template.id) }}" class="w-full h-full border"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

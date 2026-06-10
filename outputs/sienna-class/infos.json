@@ -1,0 +1,120 @@
+{
+  "version": "v3",
+  "language": "fr",
+  "generated_at": "2026-05-17T18:01:07.680696+00:00",
+  "with_cover_letter": false,
+  "cv": {
+    "name": "sienna-class",
+    "label": "Sienna Class",
+    "category": "executive",
+    "description": "Un CV élégant et statutaire, parfait pour les cadres et directeurs. La mise en page aérée met en valeur une grande photo de profil et une typographie soignée. La palette de couleurs chaudes et les séparateurs fins créent une impression de professionnalisme et de confiance. La section inférieure en trois colonnes organise parfaitement les compétences et informations complémentaires.",
+    "primary_color": "#333333",
+    "font_family": "Raleway",
+    "is_premium": false,
+    "price": null,
+    "is_active": true,
+    "has_photo": true,
+    "tags": [
+      "élégant",
+      "professionnel",
+      "cadre",
+      "directeur",
+      "classique",
+      "photo",
+      "couleurs chaudes",
+      "structuré"
+    ],
+    "review_description": "CV une colonne avec en-tête photo + nom. Titres de section beiges soulignés. Expériences sur deux colonnes (date/lieu à gauche, poste/desc à droite). Pied de page en 3 colonnes pour langues/compétences/loisirs. Polices Raleway et Lato. Look pro/exécutif.",
+    "layout_key": "single-column"
+  },
+  "cover_letter": null,
+  "paired_documents": {
+    "cover_letter": null
+  },
+  "_extraction_meta": {
+    "cv": {
+      "fonts_detected": [
+        {
+          "name": "TTNormsPro",
+          "size": 8.0,
+          "weight": "normal",
+          "style": "normal"
+        },
+        {
+          "name": "TTNormsPro",
+          "size": 9.0,
+          "weight": "normal",
+          "style": "normal"
+        },
+        {
+          "name": "Raleway",
+          "size": 8.0,
+          "weight": "bold",
+          "style": "normal"
+        },
+        {
+          "name": "TTNormsPro",
+          "size": 8.0,
+          "weight": "bold",
+          "style": "normal"
+        },
+        {
+          "name": "Raleway",
+          "size": 11.0,
+          "weight": "bold",
+          "style": "normal"
+        }
+      ],
+      "color_palette": [
+        {
+          "hex": "#FFFFFF",
+          "usage_pct": 88.8
+        },
+        {
+          "hex": "#EAE9E7",
+          "usage_pct": 2.9
+        },
+        {
+          "hex": "#DBD8D4",
+          "usage_pct": 2.9
+        },
+        {
+          "hex": "#C8C8C8",
+          "usage_pct": 2.7
+        },
+        {
+          "hex": "#B6B6B6",
+          "usage_pct": 1.0
+        },
+        {
+          "hex": "#D6C1AA",
+          "usage_pct": 0.6
+        }
+      ],
+      "estimated_columns": 1,
+      "sidebar_position": null,
+      "sidebar_color": null,
+      "has_photo": true,
+      "photo_position": "top-left",
+      "page_dimensions_mm": [
+        210.1,
+        297.1
+      ],
+      "is_a4": true,
+      "text_density_score": 0.334,
+      "margins_mm": {
+        "top": 42.4,
+        "bottom": 15.8,
+        "left": 13.9,
+        "right": 13.9
+      },
+      "header_geometry": {
+        "height_mm": 39.5,
+        "background": null,
+        "full_width_band": false
+      },
+      "avg_section_gap_mm": 5.8
+    },
+    "lm": null
+  }
+}

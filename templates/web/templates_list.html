@@ -1,0 +1,68 @@
+
+{% extends "web/base.html" %}
+
+{% block title %}All Templates - Karria{% endblock %}
+
+{% block content %}
+<div class="container mx-auto">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold text-gray-800">Generated Templates</h1>
+        <a href="{{ url_for('generate_new_template_form') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            + Generate New
+        </a>
+    </div>
+
+    <div class="bg-white shadow-md rounded-lg">
+        <div class="p-4">
+            <input type="text" placeholder="Search templates..." class="w-full p-2 border border-gray-300 rounded">
+        </div>
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Template ID
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Label
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Category
+                    </th>
+                    <th scope="col" class="relative px-6 py-3">
+                        <span class="sr-only">Actions</span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                {% if templates %}
+                    {% for template in templates %}
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            {{ template.id }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                            {{ template.label }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                {{ template.category }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <a href="{{ url_for('preview_template', template_id=template.id) }}" class="text-indigo-600 hover:text-indigo-900">Preview</a>
+                            <a href="#" class="text-red-600 hover:text-red-900 ml-4">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="4" class="text-center py-10 text-gray-500">
+                            No templates found. <a href="{{ url_for('generate_new_template_form') }}" class="text-blue-500 hover:underline">Generate one now!</a>
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

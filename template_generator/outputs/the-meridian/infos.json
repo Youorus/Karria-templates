@@ -1,0 +1,217 @@
+{
+  "version": "v3",
+  "language": "fr",
+  "generated_at": "2026-05-10T13:16:47.658390+00:00",
+  "with_cover_letter": true,
+  "cv": {
+    "name": "the-meridian",
+    "label": "The Meridian",
+    "category": "professional",
+    "description": "Un CV qui allie clarté et structure. Sa mise en page à deux colonnes, guidée par une chronologie verticale, présente votre parcours avec précision. L'en-tête audacieux, avec votre nom et une photo ronde, crée une première impression forte et professionnelle.",
+    "primary_color": "#323232",
+    "font_family": "Raleway",
+    "is_premium": false,
+    "price": null,
+    "is_active": true,
+    "has_photo": true,
+    "tags": [
+      "professionnel",
+      "structuré",
+      "timeline",
+      "deux colonnes",
+      "moderne",
+      "élégant",
+      "avec photo"
+    ],
+    "review_description": "CV deux colonnes avec timelines verticales pour les expériences et la formation. Header avec grand nom, ligne verticale et photo ronde. Typographie Raleway, monochrome.",
+    "layout_key": "two-column-left-sidebar"
+  },
+  "cover_letter": {
+    "name": "lettre-de-motivation-the-meridian",
+    "label": "Lettre de motivation — The Meridian",
+    "category": "professional",
+    "description": "Une lettre de motivation assortie, reprenant la typographie épurée et la mise en page professionnelle du CV The Meridian pour une candidature cohérente et soignée.",
+    "primary_color": "#646464",
+    "font_family": "Inter",
+    "layout_key": "standard-letter"
+  },
+  "paired_documents": {
+    "cover_letter": {
+      "name": "lettre-de-motivation-the-meridian",
+      "label": "Lettre de motivation — The Meridian",
+      "category": "professional",
+      "description": "Une lettre de motivation assortie, reprenant la typographie épurée et la mise en page professionnelle du CV The Meridian pour une candidature cohérente et soignée.",
+      "primary_color": "#646464",
+      "font_family": "Inter",
+      "layout_key": "standard-letter"
+    }
+  },
+  "_extraction_meta": {
+    "cv": {
+      "fonts_detected": [
+        {
+          "name": "Raleway",
+          "size": 9.0,
+          "weight": "normal",
+          "style": "normal"
+        },
+        {
+          "name": "Raleway",
+          "size": 10.0,
+          "weight": "normal",
+          "style": "normal"
+        },
+        {
+          "name": "Raleway",
+          "size": 10.0,
+          "weight": "bold",
+          "style": "normal"
+        },
+        {
+          "name": "Raleway",
+          "size": 15.0,
+          "weight": "bold",
+          "style": "normal"
+        },
+        {
+          "name": "Raleway",
+          "size": 30.0,
+          "weight": "bold",
+          "style": "normal"
+        }
+      ],
+      "color_palette": [
+        {
+          "hex": "#FFFFFF",
+          "usage_pct": 88.6
+        },
+        {
+          "hex": "#C1C1C1",
+          "usage_pct": 1.9
+        },
+        {
+          "hex": "#9C9C9C",
+          "usage_pct": 1.9
+        },
+        {
+          "hex": "#AEAEAE",
+          "usage_pct": 1.8
+        },
+        {
+          "hex": "#D5D5D5",
+          "usage_pct": 1.7
+        },
+        {
+          "hex": "#E7E7E7",
+          "usage_pct": 1.7
+        }
+      ],
+      "estimated_columns": 1,
+      "sidebar_position": null,
+      "sidebar_color": null,
+      "has_photo": true,
+      "photo_position": "top-right",
+      "page_dimensions_mm": [
+        210.1,
+        297.1
+      ],
+      "is_a4": true,
+      "text_density_score": 0.3,
+      "margins_mm": {
+        "top": 71.4,
+        "bottom": 27.6,
+        "left": 21.0,
+        "right": 21.1
+      },
+      "header_geometry": {
+        "height_mm": 47.0,
+        "background": null,
+        "full_width_band": false
+      },
+      "avg_section_gap_mm": 2.1
+    },
+    "lm": {
+      "fonts_detected": [
+        {
+          "name": "TTCommonsPro-Rg",
+          "size": 12.0,
+          "weight": "normal",
+          "style": "normal"
+        },
+        {
+          "name": "TTCommonsPro-Rg",
+          "size": 14.0,
+          "weight": "normal",
+          "style": "normal"
+        },
+        {
+          "name": "TTCommonsPro-BdIt",
+          "size": 13.0,
+          "weight": "bold",
+          "style": "italic"
+        },
+        {
+          "name": "CanvaSans",
+          "size": 10.9,
+          "weight": "normal",
+          "style": "normal"
+        },
+        {
+          "name": "TheSeasons-Bd",
+          "size": 51.0,
+          "weight": "bold",
+          "style": "normal"
+        }
+      ],
+      "color_palette": [
+        {
+          "hex": "#FFFFFF",
+          "usage_pct": 89.6
+        },
+        {
+          "hex": "#818181",
+          "usage_pct": 1.8
+        },
+        {
+          "hex": "#959595",
+          "usage_pct": 1.5
+        },
+        {
+          "hex": "#C0C0C0",
+          "usage_pct": 1.5
+        },
+        {
+          "hex": "#D4D4D4",
+          "usage_pct": 1.5
+        },
+        {
+          "hex": "#E8E8E8",
+          "usage_pct": 1.4
+        }
+      ],
+      "estimated_columns": 1,
+      "sidebar_position": null,
+      "sidebar_color": null,
+      "has_photo": false,
+      "photo_position": null,
+      "page_dimensions_mm": [
+        210.1,
+        297.1
+      ],
+      "is_a4": true,
+      "text_density_score": 0.346,
+      "margins_mm": {
+        "top": 36.3,
+        "bottom": 27.9,
+        "left": 21.0,
+        "right": 20.7
+      },
+      "header_geometry": {
+        "height_mm": 56.0,
+        "background": null,
+        "full_width_band": false
+      },
+      "avg_section_gap_mm": 6.4
+    }
+  }
+}

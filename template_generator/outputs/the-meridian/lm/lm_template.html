@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="{{ preferred_language | default('fr') }}">
+<head>
+    <meta charset="UTF-8">
+    <title>Lettre de Motivation - {{ fullName }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        @page {
+            size: A4;
+            margin: 0;
+        }
+        html, body {
+            width: 210mm;
+            height: 297mm;
+            margin: 0;
+            padding: 0;
+            font-family: 'Lato', sans-serif;
+            font-size: 10.5pt;
+            line-height: 1.4;
+            color: #000000;
+            background: white;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .page {
+            width: 210mm;
+            height: 297mm;
+            max-height: 297mm;
+            padding: 36.3mm 20.7mm 27.9mm 21.0mm;
+            margin: 0;
+            overflow: hidden;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+        .top-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 12mm;
+        }
+        .sender-info {
+            text-align: left;
+        }
+        .full-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 32pt;
+            font-weight: 700;
+            line-height: 1.1;
+            margin: 0;
+            padding: 0;
+        }
+        .job-title {
+            font-size: 10pt;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 4mm 0 6mm 0;
+        }
+        .contact-info p {
+            margin: 1mm 0;
+            font-size: 10pt;
+        }
+        .recipient-info {
+            text-align: left;
+        }
+        .recipient-info p {
+            margin: 1mm 0;
+            font-size: 10pt;
+        }
+        .subject {
+            font-weight: 700;
+            font-size: 11pt;
+            margin-top: 10mm;
+            margin-bottom: 8mm;
+        }
+        .salutation {
+            margin-bottom: 4mm;
+        }
+        .paragraph {
+            margin: 0 0 8px 0;
+            text-align: justify;
+        }
+        .closing {
+            margin-top: 8mm;
+        }
+        .signature {
+            margin-top: 4mm;
+        }
+    
+
+/* Karria LM safety — A4 strict */
+@page { size: A4; margin: 0; }
+html, body {
+  width: 210mm !important; height: 297mm !important;
+  margin: 0 !important; padding: 0 !important;
+  overflow: hidden !important; background: white !important;
+}
+.page {
+  width: 210mm !important; height: 297mm !important;
+  max-height: 297mm !important; margin: 0 !important;
+  padding: 16mm 18mm !important; overflow: hidden !important;
+  box-shadow: none !important; background: white !important;
+  display: flex !important; flex-direction: column !important;
+}
+.header, .letter-header, .lm-header, [class*="header"] {
+  margin-top: 0 !important; margin-bottom: 10mm !important;
+  padding-top: 0 !important; max-height: 48mm !important;
+}
+.sender-info .full-name, .sender-info h1, .full-name, h1 {
+  font-size: 30pt !important; line-height: 1 !important;
+  margin-top: 0 !important; margin-bottom: 6px !important;
+}
+.content, .letter-body, .lm-body, main {
+  flex: 1 1 auto !important; overflow: hidden !important;
+  font-size: 10pt !important; line-height: 1.36 !important;
+}
+p, .paragraph { line-height: 1.36 !important; }
+.paragraph { margin-top: 0 !important; margin-bottom: 7px !important; }
+.closing { margin-top: 10px !important; margin-bottom: 10px !important; }
+
+</style>
+</head>
+<body>
+    <div class="page">
+        <div class="top-section">
+            <div class="sender-info">
+                <h1 class="full-name">{{ fullName }}</h1>
+                {% if jobTitle %}<p class="job-title">{{ jobTitle }}</p>{% endif %}
+                <div class="contact-info">
+                    {% if contact.address %}<p>{{ contact.address }}</p>{% endif %}
+                    {% if contact.phone %}<p>{{ contact.phone }}</p>{% endif %}
+                    {% if contact.email %}<p>{{ contact.email }}</p>{% endif %}
+                </div>
+            </div>
+            <div class="recipient-info">
+                {% if recipient.company %}<p><strong>{{ recipient.company }}</strong></p>{% endif %}
+                {% if recipient.address %}<p>{{ recipient.address }}</p>{% endif %}
+                {% if city and date %}<p style="margin-top: 8mm;">Le {{ date }},</p>{% endif %}
+            </div>
+        </div>
+
+        <div class="letter-body">
+            {% if subject %}
+            <p class="subject">{{ labels.subject }} : {{ subject }}</p>
+            {% endif %}
+            
+            {% if salutation %}
+            <p class="salutation">{{ salutation }}</p>
+            {% endif %}
+
+            {% for para in paragraphs %}
+            <p class="paragraph">{{ para }}</p>
+            {% endfor %}
+
+            {% if closing %}
+            <p class="closing">{{ closing }}</p>
+            {% endif %}
+            
+            <p class="signature">{{ fullName }}</p>
+        </div>
+    </div>
+</body>
+</html>

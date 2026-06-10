@@ -1,0 +1,29 @@
+{
+  "fullName": "Sacha Dubois",
+  "jobTitle": "Chargée de projet",
+  "city": "Any City",
+  "date": "Le 8 juin 2026,",
+  "subject": "Candidature pour le poste de graphiste",
+  "salutation": "Madame, Monsieur,",
+  "closing": "Je vous prie d'agréer, Madame, Monsieur, mes salutations distinguées.",
+  "preferred_language": "fr",
+  "contact": {
+    "phone": "+123-456-7890",
+    "email": "hello@reallygreatsite.com",
+    "address": "123 Anywhere St., Any City"
+  },
+  "recipient": {
+    "company": "Concordia",
+    "address": "123 Anywhere St., Any City",
+    "name": ""
+  },
+  "labels": {
+    "subject": "Objet"
+  },
+  "paragraphs": [
+    "Passionnée par le design graphique et forte d'une expérience diversifiée dans le domaine, je vous adresse ma candidature pour le poste de graphiste au sein de votre entreprise.",
+    "Diplômée en design graphique de l'École des Arts Visuels d'Any City, j'ai eu l'opportunité de travailler avec diverses marques et entreprises, de la conception d'identités visuelles à la création de sites web et d'illustrations sur mesure. Chaque projet m'a permis d'affiner ma capacité à transformer des idées en visuels percutants, tout en respectant les exigences spécifiques et les délais impartis.",
+    "Mon approche est à la fois méthodique et créative. Je commence chaque projet par une compréhension approfondie des besoins et objectifs du client, puis je développe des concepts visuels qui allient esthétique et fonctionnalité. Ma maîtrise des outils de création graphique, me permet de créer des solutions innovantes et adaptées aux attentes.",
+    "Je serais ravie de pouvoir discuter plus en détail de ma candidature lors d'un entretien. Je suis disponible à votre convenance et vous remercie par avance pour l'attention portée à ma demande."
+  ]
+}

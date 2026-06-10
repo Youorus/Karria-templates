@@ -1,0 +1,81 @@
+{
+  "fullName": "Benjamin Leroy",
+  "jobTitle": "",
+  "photo": "https://i.imgur.com/Tda0fTf.png",
+  "summary": "Ingénieur aérospatial polyvalent, je dispose d'une expérience significative dans la modélisation numérique, l'analyse de performances aérodynamiques et la gestion de projets spatiaux.",
+  "availability": "",
+  "preferred_language": "fr",
+  "contact": {
+    "phone": "+123-456-7890",
+    "email": "hello@reallygreatsite.com",
+    "address": "123 Anywhere St., Any City"
+  },
+  "labels": {
+    "contact": "Contact",
+    "experiences": "Expériences Professionnelles",
+    "education": "Formation",
+    "skills": "Compétences",
+    "languages": "Langues",
+    "interests": "Centres d'intérêt",
+    "profile": "Profil"
+  },
+  "experiences": [
+    {
+      "position": "Ingénieur Aérospatial",
+      "company": "Concordia",
+      "start": "2023",
+      "end": "Aujourd'hui",
+      "description": "Conception et développement de sous-systèmes pour satellites de télécommunication. Gestion de projets R&D de la conception à la réalisation avec des partenaires internationaux."
+    },
+    {
+      "position": "Ingénieur de Recherche en Aérospatial",
+      "company": "Messagem",
+      "start": "2021",
+      "end": "2023",
+      "description": "Recherche sur les véhicules hypersoniques et propulsion avancée. Développement de modèles numériques pour simuler les écoulements et évaluer les performances. Publication d'articles."
+    },
+    {
+      "position": "Stagiaire en Ingénierie Aérospatiale",
+      "company": "Nomade",
+      "start": "Juillet",
+      "end": "décembre 2020",
+      "description": "Assistance à l'analyse de données de missions spatiales (orbites, trajectoires, performances). Contribution à la préparation de rapports et à l'évaluation des systèmes de propulsion."
+    }
+  ],
+  "education": [
+    {
+      "degree": "Master en Ingénierie Aérospatiale",
+      "school": "École Amédé Autran",
+      "start": "2018",
+      "end": "2020"
+    },
+    {
+      "degree": "Bachelor en Ingénierie Mécanique",
+      "school": "École Amédé Autran",
+      "start": "2015",
+      "end": "2018"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Conception et modélisation de véhicules spatiaux"
+    },
+    {
+      "name": "Analyse des performances aérodynamiques"
+    },
+    {
+      "name": "Simulation numérique et calcul haute performance"
+    },
+    {
+      "name": "Gestion de projet et management d'équipe"
+    }
+  ],
+  "languages": [
+    {
+      "name": "Français"
+    },
+    {
+      "name": "Anglais"
+    }
+  ]
+}

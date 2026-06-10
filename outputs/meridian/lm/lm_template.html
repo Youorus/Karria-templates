@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Lettre de Motivation - {{ fullName }}</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Lato:wght@400;700&family=Montserrat:wght@400&display=swap');
+
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        html, body {
+            width: 210mm;
+            height: 297mm;
+            margin: 0;
+            padding: 0;
+            font-family: 'Lato', sans-serif;
+            font-size: 10.5pt;
+            line-height: 1.4;
+            color: #000000;
+            background-color: #FFFFFF;
+            -webkit-print-color-adjust: exact;
+        }
+
+        .page {
+            width: 210mm;
+            height: 297mm;
+            max-height: 297mm;
+            padding: 36.3mm 20.7mm 27.9mm 21.0mm;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Header */
+        .header {
+            margin-bottom: 10mm;
+        }
+
+        .full-name .name-line {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 32pt;
+            font-weight: 700;
+            line-height: 1.0;
+            margin: 0;
+            padding: 0;
+            color: #000000;
+        }
+
+        .job-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 9pt;
+            letter-spacing: 3.5px;
+            text-transform: uppercase;
+            margin-top: 4mm;
+            margin-bottom: 6mm;
+        }
+
+        .contact-info {
+            font-size: 10pt;
+            line-height: 1.3;
+        }
+
+        .contact-info p {
+            margin: 1mm 0;
+        }
+
+        /* Recipient Block */
+        .recipient-block {
+            align-self: flex-end;
+            text-align: left;
+            margin-bottom: 12mm;
+            padding-top: 5mm;
+            width: 50%;
+        }
+
+        .recipient-block p {
+            margin: 1mm 0;
+            font-size: 10.5pt;
+        }
+
+        .recipient-company {
+            font-weight: 700;
+        }
+
+        /* Main Content */
+        .content {
+            flex-grow: 1;
+        }
+
+        .subject {
+            font-weight: 700;
+            font-size: 11pt;
+            margin-bottom: 8mm;
+        }
+
+        .salutation {
+            margin-bottom: 4mm;
+        }
+
+        .paragraph {
+            margin-top: 0;
+            margin-bottom: 9px;
+            text-align: justify;
+        }
+
+        /* Footer */
+        .footer {
+            padding-top: 6mm;
+        }
+
+        .closing {
+            margin-bottom: 8mm;
+        }
+
+        .signature {
+            font-weight: normal;
+        }
+    
+
+/* Karria LM safety — A4 strict */
+@page { size: A4; margin: 0; }
+html, body {
+  width: 210mm !important; height: 297mm !important;
+  margin: 0 !important; padding: 0 !important;
+  overflow: hidden !important; background: white !important;
+}
+.page {
+  width: 210mm !important; height: 297mm !important;
+  max-height: 297mm !important; margin: 0 !important;
+  padding: 16mm 18mm !important; overflow: hidden !important;
+  box-shadow: none !important; background: white !important;
+  display: flex !important; flex-direction: column !important;
+}
+.header, .letter-header, .lm-header, [class*="header"] {
+  margin-top: 0 !important; margin-bottom: 10mm !important;
+  padding-top: 0 !important; max-height: 48mm !important;
+}
+.sender-info .full-name, .sender-info h1, .full-name, h1 {
+  font-size: 30pt !important; line-height: 1 !important;
+  margin-top: 0 !important; margin-bottom: 6px !important;
+}
+.content, .letter-body, .lm-body, main {
+  flex: 1 1 auto !important; overflow: hidden !important;
+  font-size: 10pt !important; line-height: 1.36 !important;
+}
+p, .paragraph { line-height: 1.36 !important; }
+.paragraph { margin-top: 0 !important; margin-bottom: 7px !important; }
+.closing { margin-top: 10px !important; margin-bottom: 10px !important; }
+
+</style>
+</head>
+<body>
+    <div class="page">
+        <header class="header">
+            <div class="full-name">
+                <p class="name-line">{{ fullName.split(' ')[0] | upper }}</p>
+                <p class="name-line">{{ fullName.split(' ')[1] | upper }}</p>
+            </div>
+            {% if jobTitle %}
+            <p class="job-title">{{ jobTitle | upper }}</p>
+            {% endif %}
+            <div class="contact-info">
+                {% if contact.address %}<p>{{ contact.address }}</p>{% endif %}
+                {% if contact.phone %}<p>{{ contact.phone }}</p>{% endif %}
+                {% if contact.email %}<p>{{ contact.email }}</p>{% endif %}
+            </div>
+        </header>
+
+        <div class="recipient-block">
+            {% if recipient.company %}<p class="recipient-company">{{ recipient.company }}</p>{% endif %}
+            {% if recipient.address %}<p>{{ recipient.address }}</p>{% endif %}
+            {% if date %}<p class="date" style="margin-top: 6mm;">{{ date }}</p>{% endif %}
+        </div>
+
+        <main class="content">
+            {% if subject %}
+            <p class="subject">
+                <strong>{{ labels.subject }} :</strong> {{ subject }}
+            </p>
+            {% endif %}
+
+            {% if salutation %}
+            <p class="salutation">{{ salutation }}</p>
+            {% endif %}
+
+            {% for para in paragraphs %}
+            <p class="paragraph">{{ para }}</p>
+            {% endfor %}
+        </main>
+
+        <footer class="footer">
+            {% if closing %}
+            <p class="closing">{{ closing }}</p>
+            {% endif %}
+            <p class="signature">{{ fullName }}</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,210 @@
+:root {
+    --color-background: #FFFFFF;
+    --color-text-dark: #323232;
+    --color-text-light: #858585;
+    --color-border: #AEAEAE;
+    --color-timeline-circle-border: #C1C1C1;
+}
+
+@page {
+    size: A4;
+    margin: 0;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+body {
+    font-family: 'Raleway', sans-serif;
+    font-size: 9pt;
+    line-height: 1.4;
+    color: var(--color-text-dark);
+    background-color: var(--color-background);
+}
+
+.page {
+    width: 210mm;
+    min-height: 297mm;
+    background-color: var(--color-background);
+    position: relative;
+    padding: 71.4mm 21.1mm 27.6mm 21.0mm;
+}
+
+.header-container {
+    position: absolute;
+    top: 35.5mm;
+    left: 21.0mm;
+    right: 21.1mm;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.name-block {
+    position: relative;
+}
+
+.name-block::after {
+    content: '';
+    position: absolute;
+    left: 1px;
+    top: 105%;
+    height: 20mm;
+    width: 1px;
+    background-color: var(--color-border);
+}
+
+.name-first {
+    font-size: 32pt;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--color-text-dark);
+    line-height: 1;
+}
+
+.name-last {
+    font-size: 32pt;
+    font-weight: 300;
+    letter-spacing: 0.25em;
+    color: var(--color-text-dark);
+    line-height: 1.2;
+}
+
+.photo {
+    width: 42mm;
+    height: 42mm;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.main-content {
+    display: grid;
+    grid-template-columns: 1fr 1.7fr;
+    gap: 20mm;
+}
+
+.section-title {
+    font-size: 12pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 6mm;
+}
+
+section {
+    margin-bottom: 8mm;
+}
+
+section:last-child {
+    margin-bottom: 0;
+}
+
+.contact p {
+    margin-bottom: 1mm;
+    font-size: 8.5pt;
+}
+
+.skills ul, .languages ul {
+    list-style: none;
+}
+
+.skills li, .languages li {
+    margin-bottom: 2mm;
+    position: relative;
+    padding-left: 5mm;
+}
+
+.skills li::before, .languages li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--color-text-dark);
+}
+
+.timeline {
+    list-style: none;
+    position: relative;
+    padding-left: 8mm;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 2.5px;
+    top: 5px;
+    bottom: 5px;
+    width: 1px;
+    background-color: var(--color-border);
+}
+
+.timeline li {
+    position: relative;
+    padding-bottom: 6mm;
+}
+
+.timeline li:last-child {
+    padding-bottom: 0;
+}
+
+.timeline li::before {
+    content: '';
+    position: absolute;
+    left: -5.5mm;
+    top: 4px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--color-background);
+    border: 1px solid var(--color-timeline-circle-border);
+}
+
+.timeline-title {
+    font-weight: 700;
+    font-size: 9.5pt;
+}
+
+.timeline-date {
+    font-size: 8pt;
+    color: var(--color-text-light);
+    margin: 0.5mm 0;
+}
+
+.timeline-subtitle {
+    font-size: 8.5pt;
+}
+
+.right-column .profile p {
+    text-align: justify;
+}
+
+.timeline-description ul {
+    list-style: none;
+    margin-top: 3mm;
+}
+
+.timeline-description li {
+    position: relative;
+    padding-left: 5mm;
+    margin-bottom: 2mm;
+    padding-bottom: 0;
+}
+
+.timeline-description li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    top: 1px;
+    font-size: 9pt;
+    color: var(--color-text-dark);
+    border: none;
+    background: none;
+    width: auto;
+    height: auto;
+}

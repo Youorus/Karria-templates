@@ -1,0 +1,6 @@
+
+/* For any custom styles if needed */
+/* For example, to ensure iframes have a border */
+iframe {
+    border: 1px solid #e5e7eb; /* gray-200 */
+}
