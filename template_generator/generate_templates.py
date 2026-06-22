@@ -782,6 +782,10 @@ class TemplateGenerator:
             extractor = extract_files_from_response if doc_type == "CV" else extract_lm_files_from_response
             files = extractor(raw)
 
+            # Auto-correct common Gemini mistakes before formal validation
+            if doc_type == "CV":
+                files = _normalize_cv_generated_files(files, schema_limits=schema_limits)
+
             try:
                 ok, errors = validate_all(files, doc_type=doc_type, schema_limits=schema_limits)
             except TypeError:
@@ -826,6 +830,134 @@ Extrait :
 
 Corrige UNIQUEMENT ces erreurs. Réémets les 4 blocs COMPLETS.
 """
+
+
+# ═════════════════════════════════════════════════════════════════════════════
+# NORMALISATION POST-IA — CV
+# ═════════════════════════════════════════════════════════════════════════════
+
+def _normalize_cv_generated_files(files: Dict[str, str], schema_limits=None) -> Dict[str, str]:
+    """
+    Corrige automatiquement les erreurs récurrentes de Gemini avant validation :
+      1. Noms de variables incorrects (ex: exp.details → exp.description)
+      2. maxItems/maxLength trop grands dans schema.json (cap aux limites physiques)
+      3. Valeurs trop longues dans data.json (troncature au maxLength du schema)
+
+    Appelée après chaque extraction Gemini, avant validate_all().
+    """
+    if not files:
+        return files
+
+    html       = files.get("template.html", "")
+    data_raw   = files.get("data.json", "{}")
+    schema_raw = files.get("schema.json", "{}")
+
+    try:
+        data = json.loads(data_raw)
+    except Exception:
+        data = {}
+
+    try:
+        schema = json.loads(schema_raw)
+    except Exception:
+        schema = {}
+
+    # ── 1. Noms de variables — remplace les alias Gemini par les noms canoniques ──
+    exp_list = data.get("experiences", [])
+    if exp_list and isinstance(exp_list[0], dict):
+        exp_keys = set(exp_list[0].keys())
+        for alias in ("details", "detail", "desc", "content", "body", "text", "tasks"):
+            if "description" in exp_keys and alias not in exp_keys:
+                html = re.sub(
+                    r'\{{\s*(\w+)\.' + re.escape(alias) + r'\s*}}',
+                    r'{{ \1.description }}',
+                    html,
+                )
+    files["template.html"] = html
+
+    # ── 2. Cap schema.json maxItems/maxLength aux limites physiques ──────────
+    if schema_limits:
+        fields = schema.get("fields", {})
+
+        def _cap_items(field_name: str, limit_attr: str, default: int):
+            f = fields.get(field_name)
+            if not isinstance(f, dict):
+                return
+            limit = getattr(schema_limits, limit_attr, default)
+            current = f.get("maxItems")
+            if current is None or current > limit:
+                f["maxItems"] = limit
+
+        def _cap_length(field_name: str, limit_attr: str, default: int):
+            f = fields.get(field_name)
+            if not isinstance(f, dict):
+                return
+            limit = getattr(schema_limits, limit_attr, default)
+            current = f.get("maxLength")
+            if current is None or current > limit:
+                f["maxLength"] = limit
+
+        _cap_items("experiences",  "experiences_max_items",  4)
+        _cap_items("education",    "education_max_items",    3)
+        _cap_items("skills",       "skills_max_items",      10)
+        _cap_items("languages",    "languages_max_items",    4)
+        _cap_items("interests",    "interests_max_items",    4)
+        _cap_items("references",   "references_max_items",   0)
+        _cap_length("summary",     "summary_max_length",   300)
+
+        # Cap experience description maxLength (nested path)
+        exp_field = fields.get("experiences")
+        if isinstance(exp_field, dict):
+            item = exp_field.get("item", {})
+            if isinstance(item, dict):
+                desc = item.get("fields", {}).get("description", {})
+                if isinstance(desc, dict):
+                    dl = getattr(schema_limits, "experience_description_max_length", 200)
+                    if desc.get("maxLength") is None or desc["maxLength"] > dl:
+                        desc["maxLength"] = dl
+
+        schema["fields"] = fields
+        files["schema.json"] = json.dumps(schema, ensure_ascii=False, indent=2)
+
+    # ── 3. Tronque data.json aux limites du schema (évite les erreurs data↔schema) ─
+    schema_fields = schema.get("fields", {})
+
+    def _max_length(field_name: str) -> Optional[int]:
+        f = schema_fields.get(field_name)
+        return f.get("maxLength") if isinstance(f, dict) else None
+
+    def _max_items(field_name: str) -> Optional[int]:
+        f = schema_fields.get(field_name)
+        return f.get("maxItems") if isinstance(f, dict) else None
+
+    def _trunc(s: str, limit: int) -> str:
+        return s[:limit - 1] + "…" if len(s) > limit else s
+
+    summary_limit = _max_length("summary")
+    if summary_limit and isinstance(data.get("summary"), str):
+        data["summary"] = _trunc(data["summary"], summary_limit)
+
+    # Truncate experience descriptions
+    exp_desc_limit = None
+    exp_field = schema_fields.get("experiences")
+    if isinstance(exp_field, dict):
+        desc_field = exp_field.get("item", {}).get("fields", {}).get("description", {})
+        exp_desc_limit = desc_field.get("maxLength") if isinstance(desc_field, dict) else None
+
+    if exp_desc_limit:
+        for exp in data.get("experiences", []):
+            if isinstance(exp, dict) and isinstance(exp.get("description"), str):
+                exp["description"] = _trunc(exp["description"], exp_desc_limit)
+
+    # Truncate arrays to maxItems
+    for arr_name in ("experiences", "education", "skills", "languages", "interests", "references"):
+        limit = _max_items(arr_name)
+        if limit is not None and isinstance(data.get(arr_name), list):
+            data[arr_name] = data[arr_name][:limit]
+
+    files["data.json"] = json.dumps(data, ensure_ascii=False, indent=2)
+
+    return files
 
 
 # ═════════════════════════════════════════════════════════════════════════════
