@@ -4,6 +4,7 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 import shutil
 import tempfile
 import os
+import asyncio
 
 # Use the shared, centralized components
 from app.templating import templates
@@ -95,15 +96,16 @@ async def generation_status_update(request: Request, task_id: str):
     if task['status'] == 'completed':
         template_id = task['result']['template_id']
         return HTMLResponse(
-            f'<div class="text-green-500 font-bold">Redirecting...</div>',
+            content="",
             headers={'HX-Redirect': f'/web/preview/{template_id}'}
         )
 
     return templates.TemplateResponse(
-        request=request, 
-        name="web/fragments/status_update.html", 
+        request=request,
+        name="web/fragments/status_update.html",
         context={
-            "task": task
+            "task": task,
+            "task_id": task_id,
         }
     )
 
@@ -138,8 +140,8 @@ async def render_template_for_preview(template_id: str):
 
 @router.post("/api/validate-render/{template_id}", name="validate_render")
 async def validate_render(request: Request, template_id: str):
-    """Runs technical validation and returns the results as an HTMX fragment."""
-    validation_results = preview_validator.validate_preview(template_id)
+    """Runs technical validation — executes Playwright sync API in a thread pool."""
+    validation_results = await asyncio.to_thread(preview_validator.validate_preview, template_id)
     return templates.TemplateResponse(
         request=request, 
         name="web/fragments/validation_results.html", 

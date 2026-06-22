@@ -1,52 +1,149 @@
-
 {% extends "web/base.html" %}
 
-{% block title %}Generate New Template - Karria{% endblock %}
+{% block title %}Generate Template — Karria{% endblock %}
 
 {% block content %}
-<div class="container mx-auto max-w-2xl">
-    <h1 class="text-3xl font-bold text-gray-800 mb-6">Generate a New Template</h1>
+<div class="max-w-2xl mx-auto">
 
-    <div class="bg-white p-8 rounded-lg shadow-md">
-        <form action="{{ url_for('start_generation') }}"
-              method="post"
-              enctype="multipart/form-data"
-              hx-post="{{ url_for('start_generation') }}"
-              hx-encoding="multipart/form-data"
-              hx-target="body"
-              hx-swap="outerHTML">
+    <!-- Header -->
+    <div class="mb-8">
+        <div class="inline-flex items-center gap-2 text-xs font-medium text-k-cyan bg-k-cyan/10 border border-k-cyan/20 px-3 py-1 rounded-full mb-3">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/>
+            </svg>
+            AI-Powered Generation
+        </div>
+        <h1 class="text-2xl font-semibold text-white">Generate New Template</h1>
+        <p class="text-gray-500 text-sm mt-1.5">Upload a CV PDF and our AI will extract the layout, typography and structure.</p>
+    </div>
 
-            <div class="mb-6">
-                <label for="cv_pdf" class="block text-sm font-medium text-gray-700 mb-2">CV (PDF format)</label>
-                <input type="file"
-                       name="cv_pdf"
-                       id="cv_pdf"
-                       required
-                       class="w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none">
-                <p class="mt-1 text-xs text-gray-500">This PDF will be analyzed to create the template.</p>
-            </div>
+    <form action="{{ url_for('start_generation') }}"
+          method="post"
+          enctype="multipart/form-data"
+          id="gen-form">
 
-            <div class="mb-6">
-                <label for="lm_pdf" class="block text-sm font-medium text-gray-700 mb-2">Cover Letter (Optional)</label>
-                <input type="file"
-                       name="lm_pdf"
-                       id="lm_pdf"
-                       class="w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none">
-                <p class="mt-1 text-xs text-gray-500">Optional cover letter to associate with the CV.</p>
-            </div>
+        <div class="space-y-5">
 
-            <div class="flex items-center justify-end">
-                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                    <span class="htmx-indicator">
-                        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            <!-- CV Upload -->
+            <div class="bg-k-card border border-k-border rounded-2xl p-6"
+                 x-data="{ dragging: false, fileName: null }"
+                 @dragover.prevent="dragging = true"
+                 @dragleave.prevent="dragging = false"
+                 @drop.prevent="dragging = false; const f = $event.dataTransfer.files[0]; if(f){ $refs.cvInput.files = $event.dataTransfer.files; fileName = f.name; }">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <p class="text-sm font-semibold text-white">CV / Resume</p>
+                        <p class="text-xs text-gray-500 mt-0.5">Required · PDF format</p>
+                    </div>
+                    <div class="w-8 h-8 rounded-lg bg-k-accent/15 border border-k-accent/25 flex items-center justify-center">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
                         </svg>
-                    </span>
-                    <span>Start Generation</span>
+                    </div>
+                </div>
+
+                <label for="cv_pdf"
+                       :class="dragging ? 'border-k-accent bg-k-accent/8' : 'border-k-border hover:border-k-accent/50'"
+                       class="flex flex-col items-center justify-center w-full h-28 border-2 border-dashed rounded-xl cursor-pointer transition-all duration-200 bg-k-surface/50 hover:bg-k-accent/5">
+                    <template x-if="!fileName">
+                        <div class="flex flex-col items-center gap-2 text-center px-4">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="1.5">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+                            </svg>
+                            <p class="text-sm text-gray-400"><span class="text-indigo-400 font-medium">Click to upload</span> or drag & drop</p>
+                            <p class="text-xs text-gray-600">PDF files only</p>
+                        </div>
+                    </template>
+                    <template x-if="fileName">
+                        <div class="flex items-center gap-3 px-4">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+                            </svg>
+                            <span class="text-sm text-emerald-400 font-medium" x-text="fileName"></span>
+                        </div>
+                    </template>
+                    <input x-ref="cvInput" type="file" name="cv_pdf" id="cv_pdf" accept=".pdf" required class="hidden"
+                           @change="fileName = $event.target.files[0]?.name || null">
+                </label>
+            </div>
+
+            <!-- Cover Letter Upload -->
+            <div class="bg-k-card border border-k-border rounded-2xl p-6"
+                 x-data="{ dragging: false, fileName: null }"
+                 @dragover.prevent="dragging = true"
+                 @dragleave.prevent="dragging = false"
+                 @drop.prevent="dragging = false; const f = $event.dataTransfer.files[0]; if(f){ $refs.lmInput.files = $event.dataTransfer.files; fileName = f.name; }">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <p class="text-sm font-semibold text-white">Cover Letter</p>
+                        <p class="text-xs text-gray-500 mt-0.5">Optional · PDF format</p>
+                    </div>
+                    <div class="w-8 h-8 rounded-lg bg-k-purple/15 border border-k-purple/25 flex items-center justify-center">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <label for="lm_pdf"
+                       :class="dragging ? 'border-k-purple bg-k-purple/8' : 'border-k-border hover:border-k-purple/50'"
+                       class="flex flex-col items-center justify-center w-full h-28 border-2 border-dashed rounded-xl cursor-pointer transition-all duration-200 bg-k-surface/50 hover:bg-k-purple/5">
+                    <template x-if="!fileName">
+                        <div class="flex flex-col items-center gap-2 text-center px-4">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="1.5">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+                            </svg>
+                            <p class="text-sm text-gray-400"><span class="text-purple-400 font-medium">Click to upload</span> or drag & drop</p>
+                            <p class="text-xs text-gray-600">PDF files only</p>
+                        </div>
+                    </template>
+                    <template x-if="fileName">
+                        <div class="flex items-center gap-3 px-4">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+                            </svg>
+                            <span class="text-sm text-emerald-400 font-medium" x-text="fileName"></span>
+                        </div>
+                    </template>
+                    <input x-ref="lmInput" type="file" name="lm_pdf" id="lm_pdf" accept=".pdf" class="hidden"
+                           @change="fileName = $event.target.files[0]?.name || null">
+                </label>
+            </div>
+
+            <!-- Info box -->
+            <div class="flex items-start gap-3 bg-k-cyan/5 border border-k-cyan/15 rounded-xl p-4">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2" class="flex-shrink-0 mt-0.5">
+                    <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                <p class="text-xs text-gray-400 leading-relaxed">The AI will analyze your PDF's layout, fonts, colors and structure to generate a reusable Jinja2 template. Generation typically takes <strong class="text-cyan-400">1–3 minutes</strong>.</p>
+            </div>
+
+            <!-- Submit -->
+            <div class="flex items-center justify-between pt-2">
+                <a href="{{ url_for('list_templates') }}" class="text-sm text-gray-500 hover:text-gray-300 transition-colors">
+                    ← Back to templates
+                </a>
+                <button type="submit"
+                        x-data="{ loading: false }"
+                        @click="loading = true"
+                        :disabled="loading"
+                        class="btn-primary inline-flex items-center gap-2 text-white text-sm font-semibold px-6 py-3 rounded-xl disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none">
+                    <template x-if="loading">
+                        <svg class="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                        </svg>
+                    </template>
+                    <template x-if="!loading">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/>
+                        </svg>
+                    </template>
+                    <span x-text="loading ? 'Starting...' : 'Start Generation'"></span>
                 </button>
             </div>
-        </form>
-    </div>
+
+        </div>
+    </form>
 </div>
 {% endblock %}

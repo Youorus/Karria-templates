@@ -1,72 +1,195 @@
-
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Karria Templates{% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'k-bg': '#070c17',
+                        'k-surface': '#0d1320',
+                        'k-card': '#111827',
+                        'k-border': '#1e2d3d',
+                        'k-accent': '#6366f1',
+                        'k-purple': '#8b5cf6',
+                        'k-cyan': '#06b6d4',
+                        'k-green': '#10b981',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
-        /* Simple style for sidebar staying fixed */
-        body { display: flex; }
-        main { flex-grow: 1; }
-        /* HTMX indicator */
-        .htmx-indicator{
-            display: none;
+        body { background: #070c17; }
+
+        .sidebar-glow {
+            box-shadow: 1px 0 20px rgba(99, 102, 241, 0.06);
         }
-        .htmx-request .htmx-indicator{
-            display: inline;
+
+        .nav-item {
+            position: relative;
+            transition: all 0.2s ease;
         }
-        .htmx-request.htmx-indicator{
-            display: inline;
+        .nav-item:hover {
+            background: rgba(99, 102, 241, 0.12);
+            color: #a5b4fc;
         }
+        .nav-item.active {
+            background: rgba(99, 102, 241, 0.18);
+            color: #a5b4fc;
+            border-left: 2px solid #6366f1;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .card-glow:hover {
+            box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.3), 0 4px 24px rgba(99, 102, 241, 0.08);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            transition: all 0.2s ease;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            color: #a5b4fc;
+            transition: all 0.2s ease;
+        }
+        .btn-secondary:hover {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: rgba(99, 102, 241, 0.5);
+        }
+
+        .htmx-indicator { display: none; }
+        .htmx-request .htmx-indicator { display: inline-flex; }
+        .htmx-request.htmx-indicator { display: inline-flex; }
+
+        .pulse-dot::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 50%;
+            background: currentColor;
+            animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+            opacity: 0.4;
+        }
+        @keyframes ping {
+            75%, 100% { transform: scale(2); opacity: 0; }
+        }
+
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: #0d1320; }
+        ::-webkit-scrollbar-thumb { background: #1e2d3d; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #6366f1; }
     </style>
 </head>
-<body class="bg-gray-100">
+<body class="bg-k-bg text-gray-100 font-sans flex h-screen overflow-hidden">
 
     <!-- Sidebar -->
-    <aside class="bg-gray-800 text-white w-64 min-h-screen p-4">
-        <div class="text-2xl font-bold mb-10">Karria</div>
-        <nav>
-            <a href="{{ url_for('list_templates') }}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">
+    <aside class="bg-k-surface sidebar-glow w-60 min-h-screen flex flex-col border-r border-k-border flex-shrink-0">
+        <!-- Logo -->
+        <div class="p-6 border-b border-k-border">
+            <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-k-accent to-k-purple flex items-center justify-center flex-shrink-0">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <span class="font-semibold text-white text-base tracking-tight">Karria</span>
+                <span class="ml-auto text-xs font-medium px-1.5 py-0.5 rounded bg-k-accent/20 text-k-accent border border-k-accent/30">AI</span>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-1 p-3 space-y-1">
+            <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 pt-2 pb-1">Workspace</p>
+            <a href="{{ url_for('list_templates') }}"
+               class="nav-item {% if request.url.path.startswith('/web/templates') or request.url.path == '/web/templates' %}active{% endif %} flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-gray-400 font-medium">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+                    <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+                </svg>
                 Templates
             </a>
-            <a href="{{ url_for('generate_new_template_form') }}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">
-                Generate New
-            </a>
-            <a href="#" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">
-                Batch Processing
+            <a href="{{ url_for('generate_new_template_form') }}"
+               class="nav-item {% if request.url.path.startswith('/web/generate') %}active{% endif %} flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-gray-400 font-medium">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/>
+                </svg>
+                Generate
             </a>
         </nav>
+
+        <!-- Footer -->
+        <div class="p-4 border-t border-k-border">
+            <div class="flex items-center gap-2.5 px-2">
+                <div class="w-7 h-7 rounded-full bg-gradient-to-br from-k-accent to-k-purple flex items-center justify-center text-xs font-bold text-white">K</div>
+                <div>
+                    <p class="text-xs font-medium text-gray-300">Karria Studio</p>
+                    <p class="text-xs text-gray-500">Template Engine</p>
+                </div>
+            </div>
+        </div>
     </aside>
 
     <!-- Main Content -->
-    <main class="w-full p-8">
-        {% block content %}{% endblock %}
+    <main class="flex-1 overflow-auto">
+        <div class="p-8 h-full">
+            {% block content %}{% endblock %}
+        </div>
     </main>
 
     <!-- Toast Notifications -->
-    <div x-data="{ toasts: [], addToast(toast) { this.toasts.push(toast); setTimeout(() => this.removeToast(toast.id), 3000); }, removeToast(id) { this.toasts = this.toasts.filter(t => t.id !== id); } }"
-         @htmx:after-swap="
-            const message = event.detail.xhr.getResponseHeader('X-Message');
-            if (message) {
-                addToast({ id: Date.now(), text: message, type: 'success' });
+    <div x-data="{
+            toasts: [],
+            addToast(msg, type = 'success') {
+                const id = Date.now();
+                this.toasts.push({ id, msg, type });
+                setTimeout(() => this.toasts = this.toasts.filter(t => t.id !== id), 4000);
             }
+         }"
+         @htmx:after-request.window="
+            const msg = $event.detail.xhr.getResponseHeader('X-Message');
+            if (msg) addToast(msg);
          "
-         class="fixed bottom-0 right-0 p-8 space-y-2">
+         class="fixed bottom-6 right-6 space-y-2 z-50">
         <template x-for="toast in toasts" :key="toast.id">
-            <div
-                x-show="true"
-                x-transition:enter="transition ease-out duration-300"
-                x-transition:enter-start="opacity-0 transform translate-y-2"
-                x-transition:enter-end="opacity-100 transform translate-y-0"
-                x-transition:leave="transition ease-in duration-200"
-                x-transition:leave-start="opacity-100 transform translate-y-0"
-                x-transition:leave-end="opacity-0 transform translate-y-2"
-                class="bg-green-500 text-white px-4 py-2 rounded-lg shadow-md"
-                x-text="toast.text">
+            <div x-show="true"
+                 x-transition:enter="transition ease-out duration-300"
+                 x-transition:enter-start="opacity-0 translate-y-2"
+                 x-transition:enter-end="opacity-100 translate-y-0"
+                 x-transition:leave="transition ease-in duration-200"
+                 x-transition:leave-start="opacity-100"
+                 x-transition:leave-end="opacity-0"
+                 class="flex items-center gap-3 bg-k-card border border-k-border px-4 py-3 rounded-xl shadow-2xl min-w-64">
+                <div class="w-2 h-2 rounded-full bg-k-green flex-shrink-0"></div>
+                <span class="text-sm text-gray-200" x-text="toast.msg"></span>
+                <button @click="toasts = toasts.filter(t => t.id !== toast.id)" class="ml-auto text-gray-500 hover:text-gray-300">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                </button>
             </div>
         </template>
     </div>
