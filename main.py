@@ -10,6 +10,7 @@ sys.path.insert(0, str(ROOT_DIR))
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
+from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
 
 # --- App Initialization ---
 app = FastAPI(
@@ -17,6 +18,9 @@ app = FastAPI(
     description="Interface web pour la génération et la gestion de templates Karria.",
     version="1.0.0"
 )
+
+# Trust X-Forwarded-Proto from Traefik so url_for() generates https:// URLs
+app.add_middleware(ProxyHeadersMiddleware, trusted_hosts="*")
 
 # --- In-Memory Task Store ---
 task_store = {}
