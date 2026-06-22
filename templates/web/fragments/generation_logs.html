@@ -1,0 +1,27 @@
+{# Self-refreshing live log fragment — polls until task is done #}
+<div id="gen-logs"
+     {% if not is_done %}
+     hx-get="{{ url_for('generation_logs', task_id=task_id) }}"
+     hx-trigger="load delay:2s"
+     hx-swap="outerHTML"
+     {% endif %}
+     class="space-y-0.5">
+
+    {% if logs %}
+        {% for line in logs %}
+        <p class="font-mono text-xs leading-relaxed whitespace-pre-wrap
+                  {% if '❌' in line or 'Error' in line or 'failed' in line or 'échec' in line %}text-red-400
+                  {% elif '🎉' in line %}text-emerald-400 font-semibold
+                  {% elif '✅' in line %}text-emerald-400
+                  {% elif '⚠️' in line %}text-amber-300
+                  {% elif '📄' in line or '🎨' in line or '🧠' in line or '💾' in line or '⏭' in line %}text-indigo-300
+                  {% else %}text-gray-400{% endif %}">{{ line }}</p>
+        {% endfor %}
+    {% else %}
+        <p class="text-gray-600 text-xs font-mono italic">Waiting for pipeline to start…</p>
+    {% endif %}
+
+    {% if is_done %}
+    <p class="text-emerald-600 text-xs font-mono mt-2 pt-2 border-t border-gray-800/40">— Pipeline finished —</p>
+    {% endif %}
+</div>

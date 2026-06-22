@@ -13,7 +13,9 @@
 
         cvJson: '',
         lmJson: '',
-        iframeReady: false,
+
+        cvPreviewUrl: '{{ url_for("render_template_for_preview", template_id=template.id) }}',
+        lmPreviewUrl: '{{ url_for("render_lm_for_preview", template_id=template.id) if has_lm else "" }}',
 
         init() {
             this.cvJson = document.getElementById('cv-json-src').textContent.trim();
@@ -28,6 +30,15 @@
         setJson(val) {
             if (this.activeTab === 'cv') this.cvJson = val;
             else this.lmJson = val;
+        },
+
+        renderDefault() {
+            const frame = document.getElementById('preview-iframe');
+            if (this.activeTab === 'lm' && this.lmPreviewUrl) {
+                frame.src = this.lmPreviewUrl;
+            } else {
+                frame.src = this.cvPreviewUrl;
+            }
         },
 
         async render() {
@@ -48,12 +59,20 @@
             document.getElementById('render-btn-text').textContent = 'Rendering…';
 
             try {
-                const resp = await fetch('{{ url_for('test_render', template_id=template.id) }}', {
+                const resp = await fetch('{{ url_for("test_render", template_id=template.id) }}', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ doc_type: this.activeTab, data })
                 });
+                if (!resp.ok) {
+                    const txt = await resp.text();
+                    frame.srcdoc = txt;
+                    frame.style.opacity = '1';
+                    this.showError('Render error (HTTP ' + resp.status + ')');
+                    return;
+                }
                 const html = await resp.text();
+                frame.src = 'about:blank';
                 frame.srcdoc = html;
                 frame.style.opacity = '1';
                 this.tested = true;
@@ -68,11 +87,6 @@
             }
         },
 
-        renderDefault() {
-            const frame = document.getElementById('preview-iframe');
-            frame.src = '{{ url_for('render_template_for_preview', template_id=template.id) }}';
-        },
-
         switchTab(tab) {
             this.activeTab = tab;
             const editor = document.getElementById('json-editor');
@@ -82,10 +96,11 @@
 
         resetData() {
             const editor = document.getElementById('json-editor');
-            editor.value = this.activeTab === 'cv'
+            const src = this.activeTab === 'cv'
                 ? document.getElementById('cv-json-src').textContent.trim()
                 : document.getElementById('lm-json-src').textContent.trim();
-            this.setJson(editor.value);
+            editor.value = src;
+            this.setJson(src);
         },
 
         showError(msg) {
@@ -99,7 +114,7 @@
             if (!confirm('Envoyer ce template au backend Karria ?\n\nCela le rendra disponible pour les utilisateurs.')) return;
             this.submitting = true;
             try {
-                const resp = await fetch('{{ url_for('submit_template', template_id=template.id) }}', {
+                const resp = await fetch('{{ url_for("submit_template", template_id=template.id) }}', {
                     method: 'POST',
                     headers: { 'HX-Request': 'true' }
                 });
@@ -141,27 +156,21 @@
         </div>
 
         <div class="flex items-center gap-3">
-            <!-- Test counter -->
             <div class="text-center px-3 py-1.5 rounded-xl bg-k-surface border border-k-border">
                 <p class="text-xl font-bold gradient-text" id="render-count">0</p>
                 <p class="text-xs text-gray-500">renders</p>
             </div>
 
-            <!-- Error banner -->
             <div id="error-banner" class="hidden text-xs text-red-300 bg-red-900/20 border border-red-500/25 px-3 py-2 rounded-xl max-w-xs"></div>
-
-            <!-- Success banner -->
             <div id="submit-success" class="hidden text-xs text-emerald-300 bg-k-green/10 border border-k-green/25 px-3 py-2 rounded-xl"></div>
 
-            <!-- Submit button -->
             <button id="submit-btn"
                     @click="submitToBackend()"
                     :disabled="submitting"
                     :class="tested
                         ? 'bg-k-green/15 border-k-green/40 text-emerald-300 hover:bg-k-green/25 hover:border-k-green/60'
                         : 'bg-k-surface border-k-border text-gray-500 cursor-not-allowed'"
-                    class="inline-flex items-center gap-2 border text-sm font-semibold px-4 py-2 rounded-xl transition-all"
-                    :title="tested ? 'Envoyer au backend' : 'Fais au moins un rendu avant d\'envoyer'">
+                    class="inline-flex items-center gap-2 border text-sm font-semibold px-4 py-2 rounded-xl transition-all">
                 <template x-if="submitting">
                     <svg class="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
@@ -187,7 +196,7 @@
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2" class="flex-shrink-0 mt-0.5">
             <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
         </svg>
-        <span>Modifie les données JSON à gauche puis clique sur <strong class="text-cyan-400">Render</strong> pour vérifier le rendu. Fais au moins un test avant de soumettre au backend.</span>
+        <span>Modifie les données JSON à gauche puis clique sur <strong class="text-cyan-400">Render</strong> pour vérifier le rendu. Fais au moins un test avant de soumettre.</span>
     </div>
 
     <!-- Main layout -->
@@ -196,7 +205,6 @@
         <!-- LEFT: JSON Editor -->
         <div class="col-span-5 flex flex-col min-h-0 bg-k-card border border-k-border rounded-2xl overflow-hidden">
 
-            <!-- Editor header with tabs -->
             <div class="flex items-center justify-between px-4 py-3 border-b border-k-border flex-shrink-0">
                 <div class="flex items-center gap-1 bg-k-surface rounded-lg p-1">
                     <button @click="switchTab('cv')"
@@ -212,7 +220,6 @@
                     </button>
                     {% endif %}
                 </div>
-
                 <div class="flex items-center gap-2">
                     <button @click="resetData()"
                             class="text-xs text-gray-500 hover:text-gray-300 transition-colors px-2 py-1 rounded-lg hover:bg-k-surface">
@@ -222,7 +229,6 @@
                 </div>
             </div>
 
-            <!-- JSON textarea -->
             <div class="flex-1 relative min-h-0">
                 <textarea id="json-editor"
                           spellcheck="false"
@@ -231,7 +237,6 @@
                           style="tab-size: 2;">{{ cv_data_json | safe }}</textarea>
             </div>
 
-            <!-- Editor footer: render button -->
             <div class="flex items-center justify-between px-4 py-3 border-t border-k-border flex-shrink-0">
                 <p class="text-xs text-gray-600">Données de test · modifiables</p>
                 <button id="render-btn"
@@ -248,7 +253,6 @@
         <!-- RIGHT: Preview iframe -->
         <div class="col-span-7 flex flex-col min-h-0 bg-k-card border border-k-border rounded-2xl overflow-hidden">
 
-            <!-- Preview header -->
             <div class="flex items-center justify-between px-4 py-3 border-b border-k-border flex-shrink-0">
                 <div class="flex items-center gap-2">
                     <div class="w-2 h-2 rounded-full bg-k-green animate-pulse"></div>
@@ -268,13 +272,10 @@
                 </div>
             </div>
 
-            <!-- A4 iframe container -->
             <div class="flex-1 overflow-auto bg-gray-600/10 flex items-start justify-center p-4 min-h-0">
                 <div class="relative flex-shrink-0" style="width: 595px;">
-                    <!-- A4 shadow frame -->
                     <div class="absolute inset-0 rounded shadow-2xl" style="box-shadow: 0 4px 40px rgba(0,0,0,0.6);"></div>
                     <iframe id="preview-iframe"
-                            src="{{ url_for('render_template_for_preview', template_id=template.id) }}"
                             class="relative block bg-white rounded"
                             style="width: 794px; height: 1123px; transform: scale(0.749); transform-origin: top left; border: none;"
                             scrolling="no"></iframe>
@@ -285,11 +286,4 @@
     </div>
 
 </div>
-
-<script>
-    // Sync textarea with Alpine state on input
-    document.getElementById('json-editor').addEventListener('input', function() {
-        if (window._x_alpine) return; // Alpine handles it
-    });
-</script>
 {% endblock %}
