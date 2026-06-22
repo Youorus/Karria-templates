@@ -127,7 +127,7 @@
         <nav class="flex-1 p-3 space-y-1">
             <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 pt-2 pb-1">Workspace</p>
             <a href="{{ url_for('list_templates') }}"
-               class="nav-item {% if request.url.path.startswith('/web/templates') or request.url.path == '/web/templates' %}active{% endif %} flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-gray-400 font-medium">
+               class="nav-item {% if request.url.path == '/web/templates' %}active{% endif %} flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-gray-400 font-medium">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
                     <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>

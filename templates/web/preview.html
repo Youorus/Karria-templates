@@ -18,6 +18,11 @@
             </div>
         </div>
         <div class="flex items-center gap-2">
+            <a href="{{ url_for('test_template', template_id=template.id) }}"
+               class="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/25 text-amber-400 hover:bg-amber-500/20 text-sm font-medium px-4 py-2 rounded-xl transition-all">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                Test
+            </a>
             <button id="submit-btn"
                     disabled
                     hx-post="{{ url_for('submit_template', template_id=template.id) }}"

@@ -7,12 +7,15 @@ import os
 import asyncio
 
 # Use the shared, centralized components
+import json
+
 from app.templating import templates
 from app.services.web.task_manager import task_manager
 from app.services.web.generation_service import generation_service
 from app.services.web.template_service import template_service
 from app.services.web.preview_service import preview_validator
 from app.services.web.submission_service import submission_service
+from app.services.web.test_service import test_service
 
 router = APIRouter()
 
@@ -150,6 +153,51 @@ async def validate_render(request: Request, template_id: str):
             "template_id": template_id
         }
     )
+
+@router.get("/test/{template_id}", name="test_template")
+async def test_template(request: Request, template_id: str):
+    """Test page: edit fake data and render the template live before submission."""
+    details = template_service.get_template_details(template_id)
+    if not details:
+        return HTMLResponse("Template not found", status_code=404)
+
+    has_lm = test_service.has_lm(template_id)
+    cv_data = test_service.get_cv_test_data(template_id)
+    lm_data = test_service.get_lm_test_data(template_id) if has_lm else {}
+
+    return templates.TemplateResponse(
+        request=request,
+        name="web/test.html",
+        context={
+            "template": details,
+            "has_lm": has_lm,
+            "cv_data_json": json.dumps(cv_data, ensure_ascii=False, indent=2),
+            "lm_data_json": json.dumps(lm_data, ensure_ascii=False, indent=2),
+            "page_title": f"Test: {template_id}",
+        }
+    )
+
+
+@router.post("/api/test-render/{template_id}", name="test_render")
+async def test_render_api(request: Request, template_id: str):
+    """Renders the template with custom JSON data and returns raw HTML."""
+    try:
+        body = await request.json()
+        doc_type = body.get("doc_type", "cv")
+        data = body.get("data", {})
+        if not isinstance(data, dict):
+            raise ValueError("data must be a JSON object")
+        if doc_type == "lm":
+            html = await asyncio.to_thread(test_service.render_lm, template_id, data)
+        else:
+            html = await asyncio.to_thread(test_service.render_cv, template_id, data)
+        return HTMLResponse(content=html)
+    except Exception as e:
+        return HTMLResponse(
+            content=f"<p style='color:red;font-family:monospace;padding:1rem'>Render error: {e}</p>",
+            status_code=500,
+        )
+
 
 @router.post("/api/submit/{template_id}", name="submit_template")
 async def submit_template(template_id: str):
